@@ -54,7 +54,7 @@ const MainPage = () => {
           </div>
         </AppBar>
         <Switch>
-          <div className="mt-28 mx-6">
+          <div className="my-28 mx-6">
             <Route
               exact
               path="/"
