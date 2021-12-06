@@ -5,7 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './app/redux/store';
+import axios from 'axios';
 
+axios.defaults.baseURL = 'https://fakestoreapi.com';
 ReactDOM.render(
   <Provider store={store}>
     <App />

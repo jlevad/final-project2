@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { AppBar, Typography } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import {
   Route,
   Switch,
@@ -12,7 +14,7 @@ import LoginPage from './pages/login/LoginPage';
 import CartPage from './pages/cart/CartPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/userRedux';
-import { useEffect } from 'react';
+import DetailProduct from './pages/detail-product/DetailProduct';
 
 const LinkTabs = (props) => {
   const { link, label, activeLink } = props;
@@ -32,6 +34,7 @@ LinkTabs.propTypes = {
 };
 
 const MainPage = () => {
+  const cart = useSelector((state) => state.cart.quantity);
   // user login
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
@@ -46,8 +49,8 @@ const MainPage = () => {
       <Router>
         <AppBar position="fixed" color="default">
           <div className="container-navbar flex justify-between items-center">
-            <div className="flex flex-row">
-              <LinkTabs link="/" label="home" activeLink="text-blue-500" />
+            <div className="flex flex-row justify-between w-full">
+              <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
               {user === null ? (
                 <LinkTabs
                   link="/login"
@@ -55,7 +58,14 @@ const MainPage = () => {
                   activeLink="text-blue-500"
                 />
               ) : (
-                <>
+                <div className="flex">
+                  <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
+                    <NavLink exact to="/cart" activeClassName="text-blue-500">
+                      <Badge badgeContent={cart} color="primary">
+                        <ShoppingCartOutlinedIcon />
+                      </Badge>
+                    </NavLink>
+                  </div>
                   <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
                     <button
                       className="text-xl font-semibold"
@@ -64,12 +74,7 @@ const MainPage = () => {
                       Logout
                     </button>
                   </div>
-                  <LinkTabs
-                    link="/cart"
-                    label="Cart"
-                    activeLink="text-blue-500"
-                  />
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -81,6 +86,7 @@ const MainPage = () => {
               path="/login"
               render={() => (user ? <Redirect to="/" /> : <LoginPage />)}
             />
+            <Route path="/product/:id" render={() => <DetailProduct />} />
             <Route
               path="/cart"
               render={() => (!user ? <Redirect to="/login" /> : <CartPage />)}
