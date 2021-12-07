@@ -49,7 +49,7 @@ const DetailProduct = () => {
     history.push('/login');
   };
 
-  const ColorButton = styled(Button)(({ theme }) => ({
+  const ColorButton = styled(Button)(() => ({
     marginTop: '24px',
     padding: '12px 18px',
     color: 'white',

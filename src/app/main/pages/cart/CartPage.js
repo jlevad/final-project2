@@ -1,9 +1,25 @@
-import { Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { Typography } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddMinBtn from '../../shared-component/AddMinBtn';
+import { useDispatch } from 'react-redux';
+import { removeProduct, updateProduct } from '../../../redux/cartRedux';
 
 const CartItem = ({ data }) => {
+  const dispatch = useDispatch();
+  const handleDel = () => {
+    dispatch(removeProduct({ ...data }));
+  };
+
+  const handleQuantity = (type) => {
+    if (type === 'inc') {
+      dispatch(updateProduct({ ...data, quantity: data.quantity + 1 }));
+    } else {
+      data.quantity > 1 &&
+        dispatch(updateProduct({ ...data, quantity: data.quantity - 1 }));
+    }
+  };
+
   return (
     <div id="cart-item" className="h-36 flex justify-between mb-6 w-full">
       <div className="content-cart h-full flex gap-8">
@@ -15,18 +31,22 @@ const CartItem = ({ data }) => {
         </div>
         <div className="desc-item-cart flex flex-col justify-between pb-4">
           <div className="top">
-            <Typography variant="h5">{data.title.slice(0, 16)}</Typography>
+            <Typography variant="h5">{data?.title?.slice(0, 40)}..</Typography>
             <Typography variant="body1" mt={1}>
               Price: ${data.price}
             </Typography>
           </div>
-          <button className="w-max">
+          <button className="w-max" onClick={handleDel}>
             <DeleteOutlineOutlinedIcon className="text-gray-400 hover:text-gray-600" />
           </button>
         </div>
       </div>
       <div className="add-item">
-        <AddMinBtn value={data.quantity} />
+        <AddMinBtn
+          value={data.quantity}
+          minBtn={() => handleQuantity('dec')}
+          addBtn={() => handleQuantity('inc')}
+        />
       </div>
     </div>
   );
@@ -43,7 +63,7 @@ const CartPage = () => {
       <div className="container-item flex flex-wrap gap-8 justify-between">
         <div className="item-cart-container" style={{ flex: '3' }}>
           {cart.products.length !== 0 ? (
-            cart.products.map((item, i) => <CartItem data={item} key={i} />)
+            cart?.products.map((item, i) => <CartItem data={item} key={i} />)
           ) : (
             <Typography variant="h4">No items</Typography>
           )}
@@ -57,7 +77,9 @@ const CartPage = () => {
             </div>
             <div className="total-product flex justify-between mt-3">
               <Typography variant="string">Total Price</Typography>
-              <Typography variant="string">${cart.totalPrice}</Typography>
+              <Typography variant="string">
+                ${cart.totalPrice.toFixed(2)}
+              </Typography>
             </div>
           </div>
           <button className="mt-4 bg-black w-full py-2 text-white rounded-lg hover:opacity-80">
