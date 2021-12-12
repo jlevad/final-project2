@@ -18,22 +18,48 @@ const LoginPage = () => {
   const history = useHistory();
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
+  // const [optionUser, setOptionUser] = useState([]);
 
-  const handleLogin = async () => {
+  // const getUser = () => {
+  //   axios.get(`${process.env.REACT_APP_BASE_API}users`)
+  //     .then((res) => {
+  //       const optionUsers = res.data.map((data) => {
+  //         return {
+  //           username: data?.username,
+  //           password: data?.password,
+  //           obj: data
+  //         }
+  //       })
+  //       setOptionUser(optionUsers);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setOptionUser([]);
+  //     })
+  // }
+
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
+
+  const handleLogin = () => {
     dispatch(loginStart());
-    if (
-      username === process.env.REACT_APP_USERNAME &&
-      password === process.env.REACT_APP_PASSWORD
-    ) {
-      const res = await axios.post('https://fakestoreapi.com/auth/login', {
-        username: username,
-        password: password,
-      });
+    // optionUser.forEach((data) => {
+    //   if (
+    //     data?.username === username &&
+    //     data?.password === password
+    //   ) {
+    axios.post(`${process.env.REACT_APP_BASE_API}auth/login`, {
+      username: username,
+      password: password,
+    }).then((res) => {
       dispatch(loginSuccess(res.data.token));
       history.push('/');
-    } else {
+    }).catch((err) => {
       dispatch(loginFailure());
-    }
+    })
+    //   }
+    // })
   };
 
   return (

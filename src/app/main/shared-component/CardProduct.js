@@ -17,7 +17,10 @@ const CardProducts = (props) => {
         className="flex flex-col items-center  shadow-md rounded-md w-full h-full p-4 cursor-pointer"
         // onClick={() => console.log(item.id)}
       >
-        <Link to={`/product/${item?.id}`}>
+        <Link
+          to={`/product/${item?.id}`}
+          className="flex items-center justify-center flex-col"
+        >
           {item ? (
             <div
               style={{ width: 150, height: 150 }}
