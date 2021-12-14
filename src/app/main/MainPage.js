@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { AppBar, Typography } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Route,
   Switch,
@@ -12,9 +13,9 @@ import {
 import HomePage from './pages/home/HomePage';
 import LoginPage from './pages/login/LoginPage';
 import CartPage from './pages/cart/CartPage';
-import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/userRedux';
 import DetailProduct from './pages/detail-product/DetailProduct';
+import SalesReportPage from './pages/sales-report/SalesReport';
 
 const LinkTabs = (props) => {
   const { link, label, activeLink } = props;
@@ -35,6 +36,7 @@ LinkTabs.propTypes = {
 
 const MainPage = () => {
   const cart = useSelector((state) => state.cart.quantity);
+
   // user login
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
@@ -50,7 +52,22 @@ const MainPage = () => {
         <AppBar position="fixed" color="default">
           <div className="container-navbar flex justify-between items-center">
             <div className="flex flex-row justify-between w-full">
-              <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
+              <div className="flex flex-row">
+                <LinkTabs
+                  link="/"
+                  label="Home"
+                  activeLink="text-blue-500"
+                />
+                {
+                  user?.email === 'admin@bukapedia.com' ?
+                    <LinkTabs
+                      link="/sales-report"
+                      label="Sales Report"
+                      activeLink="text-blue-500"
+                    />
+                    : null
+                }
+              </div>
               {user === null ? (
                 <LinkTabs
                   link="/login"
@@ -59,21 +76,35 @@ const MainPage = () => {
                 />
               ) : (
                 <div className="flex">
-                  <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
-                    <NavLink exact to="/cart" activeClassName="text-blue-500">
-                      <Badge badgeContent={cart} color="primary">
-                        <ShoppingCartOutlinedIcon />
-                      </Badge>
-                    </NavLink>
-                  </div>
-                  <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
-                    <button
-                      className="text-xl font-semibold"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
+                  {
+                    user?.email === 'admin@bukapedia.com' ?
+                      <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
+                        <button
+                          className="text-xl font-semibold"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                      :
+                      <>
+                        <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
+                          <NavLink exact to="/cart" activeClassName="text-blue-500">
+                            <Badge badgeContent={cart} color="primary">
+                              <ShoppingCartOutlinedIcon />
+                            </Badge>
+                          </NavLink>
+                        </div>
+                        <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
+                          <button
+                            className="text-xl font-semibold"
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </>
+                  }
                 </div>
               )}
             </div>
@@ -88,13 +119,17 @@ const MainPage = () => {
             />
             <Route path="/product/:id" render={() => <DetailProduct />} />
             <Route
+              path="/sales-report"
+              render={() => <SalesReportPage />}
+            />
+            <Route
               path="/cart"
               render={() => (!user ? <Redirect to="/login" /> : <CartPage />)}
             />
           </div>
         </Switch>
       </Router>
-    </div>
+    </div >
   );
 };
 

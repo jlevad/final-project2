@@ -18,48 +18,26 @@ const LoginPage = () => {
   const history = useHistory();
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  // const [optionUser, setOptionUser] = useState([]);
-
-  // const getUser = () => {
-  //   axios.get(`${process.env.REACT_APP_BASE_API}users`)
-  //     .then((res) => {
-  //       const optionUsers = res.data.map((data) => {
-  //         return {
-  //           username: data?.username,
-  //           password: data?.password,
-  //           obj: data
-  //         }
-  //       })
-  //       setOptionUser(optionUsers);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setOptionUser([]);
-  //     })
-  // }
-
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
+  const admin = {
+    email: 'admin@bukapedia.com',
+    password: 'admin123'
+  };
 
   const handleLogin = () => {
     dispatch(loginStart());
-    // optionUser.forEach((data) => {
-    //   if (
-    //     data?.username === username &&
-    //     data?.password === password
-    //   ) {
-    axios.post(`${process.env.REACT_APP_BASE_API}auth/login`, {
-      username: username,
-      password: password,
-    }).then((res) => {
-      dispatch(loginSuccess(res.data.token));
-      history.push('/');
-    }).catch((err) => {
-      dispatch(loginFailure());
-    })
-    //   }
-    // })
+    if (username === admin.email && password === admin.password) {
+      dispatch(loginSuccess(admin));
+    } else {
+      axios.post(`${process.env.REACT_APP_BASE_API}auth/login`, {
+        username: username,
+        password: password,
+      }).then((res) => {
+        dispatch(loginSuccess(res.data.token));
+        history.push('/');
+      }).catch((err) => {
+        dispatch(loginFailure());
+      })
+    }
   };
 
   return (
@@ -116,7 +94,7 @@ const LoginPage = () => {
             variant="contained"
             fullWidth
             onClick={handleLogin}
-            disabled={loading ? true : false}
+            disabled={loading}
           >
             {loading ? 'Loading...' : 'LOGIN'}
           </Button>
