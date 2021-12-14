@@ -2,22 +2,22 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useHistory } from 'react-router-dom';
 import CardProducts from '../../shared-component/CardProduct';
 
-const HomePage = () => {
+const HomePage = (props) => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   const getData = () => {
     axios
       .get('https://fakestoreapi.com/products')
       .then((res) => {
-        // console.log(res)
         setDatas(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        // console.log(err);
         setDatas([]);
         setLoading(false);
       });
@@ -26,6 +26,10 @@ const HomePage = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    props.setHistory(history);
+  }, [history]);
 
   return (
     // key object

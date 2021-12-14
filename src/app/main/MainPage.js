@@ -16,6 +16,7 @@ import CartPage from './pages/cart/CartPage';
 import { logout } from '../redux/userRedux';
 import DetailProduct from './pages/detail-product/DetailProduct';
 import SalesReportPage from './pages/sales-report/SalesReport';
+import { useState } from 'react';
 
 const LinkTabs = (props) => {
   const { link, label, activeLink } = props;
@@ -35,6 +36,8 @@ LinkTabs.propTypes = {
 };
 
 const MainPage = () => {
+  const [history, setHistory] = useState(null);
+
   const cart = useSelector((state) => state.cart.quantity);
 
   // user login
@@ -44,6 +47,7 @@ const MainPage = () => {
   // logout
   const handleLogout = () => {
     dispatch(logout());
+    history.push('/login')
   };
 
   return (
@@ -112,7 +116,7 @@ const MainPage = () => {
         </AppBar>
         <Switch>
           <div className="my-28 mx-6">
-            <Route exact path="/" render={() => <HomePage />} />
+            <Route exact path="/" render={() => <HomePage setHistory={setHistory}  />} />
             <Route
               path="/login"
               render={() => (user ? <Redirect to="/" /> : <LoginPage />)}
