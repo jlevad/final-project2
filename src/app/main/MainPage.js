@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { AppBar, Typography } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Route,
   Switch,
@@ -12,11 +13,12 @@ import {
 import HomePage from './pages/home/HomePage';
 import LoginPage from './pages/login/LoginPage';
 import CartPage from './pages/cart/CartPage';
-import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/userRedux';
 import DetailProduct from './pages/detail-product/DetailProduct';
+
 import Admin from './pages/admin/Admin';
-import SalesReport from './pages/sales-report/SalesReport';
+import SalesReportPage from './pages/sales-report/SalesReport';
+import { useState } from 'react';
 
 const LinkTabs = (props) => {
   const { link, label, activeLink } = props;
@@ -36,7 +38,10 @@ LinkTabs.propTypes = {
 };
 
 const MainPage = () => {
+  const [history, setHistory] = useState(null);
+
   const cart = useSelector((state) => state.cart.quantity);
+
   // user login
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
@@ -44,6 +49,7 @@ const MainPage = () => {
   // logout
   const handleLogout = () => {
     dispatch(logout());
+    history.push('/login');
   };
 
   return (
@@ -52,13 +58,23 @@ const MainPage = () => {
         <AppBar position="fixed" color="default">
           <div className="container-navbar flex justify-between items-center">
             <div className="flex flex-row justify-between w-full">
-              <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
-              {/* link admin sementara */}
-              <LinkTabs
-                link="/admin"
-                label="Admin"
-                activeLink="text-blue-500"
-              />
+              <div className="flex flex-row">
+                <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
+                {user?.email === 'admin@bukapedia.com' ? (
+                  <>
+                    <LinkTabs
+                      link="/admin"
+                      label="Admin"
+                      activeLink="text-blue-500"
+                    />
+                    <LinkTabs
+                      link="/sales-report"
+                      label="Sales Report"
+                      activeLink="text-blue-500"
+                    />
+                  </>
+                ) : null}
+              </div>
               {user === null ? (
                 <LinkTabs
                   link="/login"
@@ -67,21 +83,38 @@ const MainPage = () => {
                 />
               ) : (
                 <div className="flex">
-                  <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
-                    <NavLink exact to="/cart" activeClassName="text-blue-500">
-                      <Badge badgeContent={cart} color="primary">
-                        <ShoppingCartOutlinedIcon />
-                      </Badge>
-                    </NavLink>
-                  </div>
-                  <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
-                    <button
-                      className="text-xl font-semibold"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
+                  {user?.email === 'admin@bukapedia.com' ? (
+                    <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
+                      <button
+                        className="text-xl font-semibold"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
+                        <NavLink
+                          exact
+                          to="/cart"
+                          activeClassName="text-blue-500"
+                        >
+                          <Badge badgeContent={cart} color="primary">
+                            <ShoppingCartOutlinedIcon />
+                          </Badge>
+                        </NavLink>
+                      </div>
+                      <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
+                        <button
+                          className="text-xl font-semibold"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -89,18 +122,22 @@ const MainPage = () => {
         </AppBar>
         <Switch>
           <div className="my-28 mx-6">
-            <Route exact path="/" render={() => <HomePage />} />
+            <Route
+              exact
+              path="/"
+              render={() => <HomePage setHistory={setHistory} />}
+            />
             <Route
               path="/login"
               render={() => (user ? <Redirect to="/" /> : <LoginPage />)}
             />
             <Route path="/product/:id" render={() => <DetailProduct />} />
+            <Route path="/sales-report" render={() => <SalesReportPage />} />
             <Route
               path="/cart"
               render={() => (!user ? <Redirect to="/login" /> : <CartPage />)}
             />
             <Route path="/admin" render={() => <Admin />} />
-            <Route path="/sales-report" render={() => <SalesReport />} />
           </div>
         </Switch>
       </Router>

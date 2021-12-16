@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useHistory } from 'react-router-dom';
 import CardProducts from '../../shared-component/CardProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,11 +12,12 @@ import {
   productSuccess,
 } from '../../../redux/productRedux';
 
-const HomePage = () => {
+const HomePage = (props) => {
   // const [datas, setDatas] = useState([]);
   // const [loading, setLoading] = useState(true);
   const product = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
+  const history = useHistory();
 
   const getData = () => {
     product(productStart());
@@ -39,6 +42,10 @@ const HomePage = () => {
       getData();
     }
   }, []);
+
+  useEffect(() => {
+    props.setHistory(history);
+  }, [history]);
 
   return (
     // key object
