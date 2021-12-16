@@ -15,6 +15,8 @@ import CartPage from './pages/cart/CartPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/userRedux';
 import DetailProduct from './pages/detail-product/DetailProduct';
+import Admin from './pages/admin/Admin';
+import SalesReport from './pages/sales-report/SalesReport';
 
 const LinkTabs = (props) => {
   const { link, label, activeLink } = props;
@@ -51,6 +53,12 @@ const MainPage = () => {
           <div className="container-navbar flex justify-between items-center">
             <div className="flex flex-row justify-between w-full">
               <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
+              {/* link admin sementara */}
+              <LinkTabs
+                link="/admin"
+                label="Admin"
+                activeLink="text-blue-500"
+              />
               {user === null ? (
                 <LinkTabs
                   link="/login"
@@ -91,6 +99,8 @@ const MainPage = () => {
               path="/cart"
               render={() => (!user ? <Redirect to="/login" /> : <CartPage />)}
             />
+            <Route path="/admin" render={() => <Admin />} />
+            <Route path="/sales-report" render={() => <SalesReport />} />
           </div>
         </Switch>
       </Router>
