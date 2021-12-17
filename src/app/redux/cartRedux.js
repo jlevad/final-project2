@@ -27,7 +27,7 @@ const cartSlice = createSlice({
       );
       state.products = newProducts;
       state.totalPrice = newProducts.reduce((prev, curr) => {
-        console.log(prev, curr.price, curr.quantity);
+        // console.log(prev, curr.price, curr.quantity);
         return prev + curr.price * curr.quantity;
       }, 0);
     },

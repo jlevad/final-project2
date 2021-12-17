@@ -121,7 +121,7 @@ const MainPage = () => {
               path="/login"
               render={() => (user ? <Redirect to="/" /> : <LoginPage />)}
             />
-            <Route path="/product/:id" render={() => <DetailProduct />} />
+            <Route path="/detail-product" render={() => <DetailProduct />} />
             <Route
               path="/sales-report"
               render={() => <SalesReportPage />}

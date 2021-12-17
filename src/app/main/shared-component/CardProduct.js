@@ -4,10 +4,21 @@ import Skeleton from '@mui/material/Skeleton';
 import Star from '@mui/icons-material/Star';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
 // import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const CardProducts = (props) => {
   const { index, item } = props;
+  const history = useHistory();
+
+  const handleClickProduct = (item) => {
+    history.push({
+      pathname: 'detail-product',
+      state: item
+    });
+  }
+
   return (
     // key object
     // title, category, description, id, image, price, rating[count, rate],
@@ -15,12 +26,12 @@ const CardProducts = (props) => {
       <div
         key={index}
         className="flex flex-col items-center  shadow-md rounded-md w-full h-full p-4 cursor-pointer"
-        // onClick={() => console.log(item.id)}
+        onClick={() => handleClickProduct(item)}
       >
-        <Link
+        {/* <Link
           to={`/product/${item?.id}`}
           className="flex items-center justify-center flex-col"
-        >
+        > */}
           {item ? (
             <div
               style={{ width: 150, height: 150 }}
@@ -63,7 +74,7 @@ const CardProducts = (props) => {
               <Skeleton width="40%" />
             </div>
           )}
-        </Link>
+        {/* </Link> */}
       </div>
     </Grid>
   );

@@ -36,7 +36,7 @@ const HomePage = (props) => {
     // title, category, description, id, image, price, rating[count, rate],
     <Grid container spacing={4}>
       {loading ? (
-        Array.from(new Array(6)).map((item, index) => (
+        Array.from(new Array(8)).map((item, index) => (
           <CardProducts
             loading={loading}
             item={item}
