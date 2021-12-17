@@ -11,6 +11,7 @@ import {
   loginStart,
   loginSuccess,
 } from '../../../redux/userRedux';
+import imageLogin from '../../../assets/login-image.png';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -42,14 +43,14 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center  md:mt-80">
-      <div className="flex flex-col items-center justify-center p-4 rounded-md w-full md:w-1/2 shadow-md bg-blue-200">
+      <img src={imageLogin} className='hidden md:inline-block w-1/2' />
+      <div className="flex flex-col items-center justify-center p-4 rounded-md w-full md:w-1/2 shadow-md bg-blue-100">
         <div className="text-center flex items-center justify-center flex-col">
-          <Typography variant="h4" className="w-full md:w-2/3">
-            Hello
+          <Typography variant="h4" className="w-full">
+            User Login
           </Typography>
-          <Typography variant="subtitle1" className="w-full md:w-2/3">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <Typography variant="subtitle1" className="w-full">
+            Please login to continue
           </Typography>
         </div>
         <TextField

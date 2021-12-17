@@ -51,7 +51,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex-grow w-full">
+    <div className=" w-full">
       <Router>
         <AppBar position="fixed" color="default">
           <div className="container-navbar flex justify-between items-center">
@@ -115,7 +115,7 @@ const MainPage = () => {
           </div>
         </AppBar>
         <Switch>
-          <div className="my-28 mx-6">
+          <div className="my-28 mx-2 md:mx-6">
             <Route exact path="/" render={() => <HomePage setHistory={setHistory}  />} />
             <Route
               path="/login"

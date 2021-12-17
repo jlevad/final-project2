@@ -11,7 +11,7 @@ const CardProducts = (props) => {
   return (
     // key object
     // title, category, description, id, image, price, rating[count, rate],
-    <Grid item xs={12} sm={4} md={2}>
+    <Grid item xs={12} sm={4} md={3}>
       <div
         key={index}
         className="flex flex-col items-center  shadow-md rounded-md w-full h-full p-4 cursor-pointer"
