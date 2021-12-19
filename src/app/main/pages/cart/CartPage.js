@@ -3,7 +3,8 @@ import { Typography } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddMinBtn from '../../shared-component/AddMinBtn';
 import { useDispatch } from 'react-redux';
-import { removeProduct, updateProduct } from '../../../redux/cartRedux';
+import { removeCart, removeProduct, updateProduct } from '../../../redux/cartRedux';
+import { productCheckout } from '../../../redux/productRedux';
 
 const CartItem = ({ data }) => {
   const dispatch = useDispatch();
@@ -15,8 +16,7 @@ const CartItem = ({ data }) => {
     if (type === 'inc') {
       dispatch(updateProduct({ ...data, quantity: data.quantity + 1 }));
     } else {
-      data.quantity > 1 &&
-        dispatch(updateProduct({ ...data, quantity: data.quantity - 1 }));
+      data.quantity > 1 && dispatch(updateProduct({ ...data, quantity: data.quantity - 1 }));
     }
   };
 
@@ -54,6 +54,13 @@ const CartItem = ({ data }) => {
 
 const CartPage = () => {
   const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch()
+
+  const handleCheckout = () => {
+    // const inibaru = cart.products.map(item => item.id)
+    dispatch(productCheckout(cart))
+    dispatch(removeCart())
+  }
 
   return (
     <div id="cart">
@@ -82,7 +89,9 @@ const CartPage = () => {
               </Typography>
             </div>
           </div>
-          <button className="mt-4 bg-black w-full py-2 text-white rounded-lg hover:opacity-80">
+          <button className="mt-4 bg-black w-full py-2 text-white rounded-lg hover:opacity-80"
+            onClick={handleCheckout}
+          >
             Checkout
           </button>
         </div>

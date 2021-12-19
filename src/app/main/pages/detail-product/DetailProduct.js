@@ -1,48 +1,43 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { Button, Typography } from '@mui/material';
 import Star from '@mui/icons-material/Star';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../../../redux/cartRedux';
+import { addProduct, updateProduct } from '../../../redux/cartRedux';
 
 const DetailProduct = () => {
   const location = useLocation();
-  const id = location.pathname.split('/')[2];
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
+  const cart = useSelector((state) => state.cart);
   const history = useHistory();
   const [product, setProduct] = useState();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get(`/products/${id}`);
-        setProduct(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getData();
-  }, [id]);
+    setProduct(location.state);
+  }, [location]);
 
   const handleQuantity = (type) => {
     if (type === 'inc') {
       setQuantity(quantity + 1);
     } else {
-      quantity > 1 && setQuantity(quantity - 1);
+      quantity > 0 && setQuantity(quantity - 1);
     }
   };
 
-  const addCart = () => {
-    dispatch(
-      addProduct({
-        ...product,
-        quantity,
-      })
-    );
+  const addCart = (item) => {
+    let a = cart?.products.filter((data) => data?.id === item?.id);
+    if (a.length === 0) {
+      dispatch(
+        addProduct({ ...product, quantity })
+      );
+    } else {
+      dispatch(
+        updateProduct({ ...product, quantity: a[0].quantity + quantity })
+      );
+    }
   };
 
   const needLogin = () => {
@@ -114,7 +109,10 @@ const DetailProduct = () => {
           <ColorButton
             variant="outlined"
             mt={4}
-            onClick={user ? addCart : needLogin}
+            onClick={() => {
+              user ? addCart(product) : needLogin();
+            }}
+            disabled={quantity < 1}
           >
             Add to cart
           </ColorButton>

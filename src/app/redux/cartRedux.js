@@ -27,12 +27,17 @@ const cartSlice = createSlice({
       );
       state.products = newProducts;
       state.totalPrice = newProducts.reduce((prev, curr) => {
-        console.log(prev, curr.price, curr.quantity);
+        // console.log(prev, curr.price, curr.quantity);
         return prev + curr.price * curr.quantity;
       }, 0);
     },
+    removeCart: (state) => {
+      state.products = [];
+      state.quantity = 0;
+      state.totalPrice = 0;
+    }
   },
 });
 
-export const { addProduct, removeProduct, updateProduct } = cartSlice.actions;
+export const { addProduct, removeProduct, updateProduct, removeCart } = cartSlice.actions;
 export default cartSlice.reducer;

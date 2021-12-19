@@ -53,7 +53,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex-grow w-full">
+    <div className=" w-full">
       <Router>
         <AppBar position="fixed" color="default">
           <div className="container-navbar flex justify-between items-center">
@@ -62,54 +62,32 @@ const MainPage = () => {
                 <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
                 {user?.email === 'admin@bukapedia.com' ? (
                   <>
-                    <LinkTabs
-                      link="/admin"
-                      label="Admin"
-                      activeLink="text-blue-500"
-                    />
-                    <LinkTabs
-                      link="/sales-report"
-                      label="Sales Report"
-                      activeLink="text-blue-500"
-                    />
+                    <LinkTabs link="/admin" label="Admin" activeLink="text-blue-500" />
+                    <LinkTabs link="/sales-report" label="Sales Report" activeLink="text-blue-500" />
                   </>
                 ) : null}
               </div>
               {user === null ? (
-                <LinkTabs
-                  link="/login"
-                  label="Login"
-                  activeLink="text-blue-500"
-                />
+                <LinkTabs link="/login" label="Login" activeLink="text-blue-500" />
               ) : (
                 <div className="flex">
                   {user?.email === 'admin@bukapedia.com' ? (
                     <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
-                      <button
-                        className="text-xl font-semibold"
-                        onClick={handleLogout}
-                      >
+                      <button className="text-xl font-semibold" onClick={handleLogout} >
                         Logout
                       </button>
                     </div>
                   ) : (
                     <>
                       <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300 cursor-pointer">
-                        <NavLink
-                          exact
-                          to="/cart"
-                          activeClassName="text-blue-500"
-                        >
+                        <NavLink exact to="/cart" activeClassName="text-blue-500" >
                           <Badge badgeContent={cart} color="primary">
                             <ShoppingCartOutlinedIcon />
                           </Badge>
                         </NavLink>
                       </div>
                       <div className="p-6 hover:text-blue-400 transition-all ease-in-out duration-300">
-                        <button
-                          className="text-xl font-semibold"
-                          onClick={handleLogout}
-                        >
+                        <button className="text-xl font-semibold" onClick={handleLogout} >
                           Logout
                         </button>
                       </div>
@@ -121,20 +99,17 @@ const MainPage = () => {
           </div>
         </AppBar>
         <Switch>
-          <div className="my-28 mx-6">
-            <Route
-              exact
-              path="/"
+          <div className="my-28 mx-2 md:mx-6">
+            <Route exact path="/"
               render={() => <HomePage setHistory={setHistory} />}
             />
-            <Route
-              path="/login"
+            <Route path="/login"
               render={() => (user ? <Redirect to="/" /> : <LoginPage />)}
             />
-            <Route path="/product/:id" render={() => <DetailProduct />} />
+
+            <Route path="/detail-product" render={() => <DetailProduct />} />
             <Route path="/sales-report" render={() => <SalesReportPage />} />
-            <Route
-              path="/cart"
+            <Route path="/cart"
               render={() => (!user ? <Redirect to="/login" /> : <CartPage />)}
             />
             <Route path="/admin" render={() => <Admin />} />
