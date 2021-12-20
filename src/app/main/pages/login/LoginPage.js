@@ -47,7 +47,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center  md:mt-80">
-      <img src={imageLogin} className='hidden md:inline-block w-1/2' />
+      <img src={imageLogin} alt='Ilustration' className='hidden md:inline-block w-1/2' />
       <div className="flex flex-col items-center justify-center p-4 rounded-md w-full md:w-1/2 shadow-md bg-blue-100">
         <div className="text-center flex items-center justify-center flex-col">
           <Typography variant="h4" className="w-full">
