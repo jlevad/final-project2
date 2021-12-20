@@ -18,6 +18,7 @@ import DetailProduct from './pages/detail-product/DetailProduct';
 
 import Admin from './pages/admin/Admin';
 import SalesReportPage from './pages/sales-report/SalesReport';
+// import imageLogo from '../assets/logo512.png';
 import { useState } from 'react';
 
 const LinkTabs = (props) => {
@@ -59,6 +60,10 @@ const MainPage = () => {
           <div className="container-navbar flex justify-between items-center">
             <div className="flex flex-row justify-between w-full">
               <div className="flex flex-row">
+                {/* <div className="flex justify-center items-center ml-4">
+                  <img src={imageLogo} className="rounded-full max-h-16" />
+                </div> */}
+                <LinkTabs link="/" label="Bukapedia" activeLink="" />
                 <LinkTabs link="/" label="Home" activeLink="text-blue-500" />
                 {user?.email === 'admin@bukapedia.com' ? (
                   <>
