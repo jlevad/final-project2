@@ -57,7 +57,6 @@ const CartPage = () => {
   const dispatch = useDispatch()
 
   const handleCheckout = () => {
-    // const inibaru = cart.products.map(item => item.id)
     dispatch(productCheckout(cart))
     dispatch(removeCart())
   }

@@ -31,7 +31,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function SalesReportPage() {
-  const { products } = useSelector((state) => state.product);
+  const { products, totalIncome } = useSelector((state) => state.product);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -45,16 +45,25 @@ export default function SalesReportPage() {
         </TableHead>
         <TableBody>
           {products.length !== 0 ?
-            (products.map((row) => (
-              <StyledTableRow key={row.id}>
-                <StyledTableCell component="th" scope="row">
-                  {row.title}
-                </StyledTableCell>
-                <StyledTableCell align="right">$ {row.price}</StyledTableCell>
-                <StyledTableCell align="right">0</StyledTableCell>
-                <StyledTableCell align="right">0</StyledTableCell>
+            <>
+              {products.map((row) => (
+                <StyledTableRow key={row.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.title}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">$ {row.price}</StyledTableCell>
+                  <StyledTableCell align="right">{row.sold}</StyledTableCell>
+                  <StyledTableCell align="right">$ {row.price * row.sold}</StyledTableCell>
+                </StyledTableRow>
+              ))}
+              <StyledTableRow >
+                <StyledTableCell component="th" scope="row"><b>Total</b></StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align="right"><b>$ {totalIncome.toFixed(2)}</b></StyledTableCell>
               </StyledTableRow>
-            ))) :
+            </>
+            :
             (
               <Typography variant="h4">No data</Typography>
             )}
