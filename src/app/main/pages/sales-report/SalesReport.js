@@ -51,8 +51,8 @@ export default function SalesReportPage() {
                   {row.title}
                 </StyledTableCell>
                 <StyledTableCell align="right">$ {row.price}</StyledTableCell>
-                <StyledTableCell align="right">0</StyledTableCell>
-                <StyledTableCell align="right">0</StyledTableCell>
+                <StyledTableCell align="right">{row.sold}</StyledTableCell>
+                <StyledTableCell align="right">{row.sold * row.price}</StyledTableCell>
               </StyledTableRow>
             ))) :
             (

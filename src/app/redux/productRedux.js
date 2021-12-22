@@ -20,8 +20,14 @@ const productSlice = createSlice({
       state.products = action.payload;
     },
     productCheckout: (state, { payload }) => {
-      // const res = state.products.filter((item) => payload.products.map(data => data.id).includes(item.id));
-      // state.checkoutProducts = res
+      state.products.map((item) => {
+        const newData = payload.products.find(data => data.id === item.id)
+        if (newData) {
+          item.stock -= newData.quantity;
+          item.sold += newData.quantity;
+        }
+        return newData
+      });
       state.totalIncome += payload.totalPrice
     },
     updateStock: (state, action) => {

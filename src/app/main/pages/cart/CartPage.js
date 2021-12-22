@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddMinBtn from '../../shared-component/AddMinBtn';
 import { useDispatch } from 'react-redux';
-import { removeCart, removeProduct, updateProduct } from '../../../redux/cartRedux';
+import { removeCart, removeProduct, updateProduct, checkOut } from '../../../redux/cartRedux';
 import { productCheckout } from '../../../redux/productRedux';
 
 const CartItem = ({ data }) => {
@@ -14,9 +14,15 @@ const CartItem = ({ data }) => {
 
   const handleQuantity = (type) => {
     if (type === 'inc') {
-      dispatch(updateProduct({ ...data, quantity: data.quantity + 1 }));
+      dispatch(updateProduct({
+        ...data,
+        quantity: data.quantity + 1,
+      }));
     } else {
-      data.quantity > 1 && dispatch(updateProduct({ ...data, quantity: data.quantity - 1 }));
+      data.quantity > 1 && dispatch(updateProduct({
+        ...data,
+        quantity: data.quantity - 1,
+      }));
     }
   };
 
@@ -55,11 +61,17 @@ const CartItem = ({ data }) => {
 const CartPage = () => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch()
-
-  const handleCheckout = () => {
+  const handleCheckout = (cart) => {
     // const inibaru = cart.products.map(item => item.id)
-    dispatch(productCheckout(cart))
-    dispatch(removeCart())
+    if (cart.products.length !== 0) {
+      cart.products.map((data) => {
+        dispatch(checkOut({
+          ...data
+        }));
+      })
+    }
+    dispatch(productCheckout(cart));
+    dispatch(removeCart());
   }
 
   return (
@@ -80,7 +92,7 @@ const CartPage = () => {
             <Typography variant="h5">Your order summary</Typography>
             <div className="total-product flex justify-between mt-7">
               <Typography variant="string">Total Product</Typography>
-              <Typography variant="string">{cart.quantity}</Typography>
+              <Typography variant="string">{cart.totalQuantity}</Typography>
             </div>
             <div className="total-product flex justify-between mt-3">
               <Typography variant="string">Total Price</Typography>
@@ -89,8 +101,9 @@ const CartPage = () => {
               </Typography>
             </div>
           </div>
-          <button className="mt-4 bg-black w-full py-2 text-white rounded-lg hover:opacity-80"
-            onClick={handleCheckout}
+          <button
+            className="mt-4 bg-black w-full py-2 text-white rounded-lg hover:opacity-80"
+            onClick={() => handleCheckout(cart)}
           >
             Checkout
           </button>
