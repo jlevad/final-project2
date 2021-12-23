@@ -65,7 +65,7 @@ const CartPage = () => {
     // const inibaru = cart.products.map(item => item.id)
     if (cart.products.length !== 0) {
       cart.products.map((data) => {
-        dispatch(checkOut({
+        return dispatch(checkOut({
           ...data
         }));
       })

@@ -53,7 +53,7 @@ const DetailProduct = () => {
             src={product?.image}
             alt={product?.title}
             // className='max-w-full max-h-full'
-            style={{ width: '200px'}}
+            style={{ width: '200px' }}
           />
         </div>
       </Grid>
@@ -81,32 +81,36 @@ const DetailProduct = () => {
             {product?.category}
           </Typography>
         </div>
-        <div className="count flex mt-5 items-center">
-          <IconButton
-            aria-label='min-button'
-            size="large"
-            onClick={() => handleQuantity('dec')}
-          >
-            <IndeterminateCheckBoxOutlinedIcon fontSize="large" />
-          </IconButton>
-          <span className="text-2xl leading-normal">{quantity}</span>
-          <IconButton
-            aria-label='min-button'
-            size="large"
-            onClick={() => handleQuantity('inc')}
-          >
-            <AddBoxOutlinedIcon fontSize="large" />
-          </IconButton>
-        </div>
-        <Button
-          variant="contained"
-          onClick={() => {
-            user ? addCart(product) : needLogin();
-          }}
-          disabled={quantity < 1}
-        >
-          Add to cart
-        </Button>
+        {user?.email ? '' :
+          <>
+            <div className="count flex mt-5 items-center">
+              <IconButton
+                aria-label='min-button'
+                size="large"
+                onClick={() => handleQuantity('dec')}
+              >
+                <IndeterminateCheckBoxOutlinedIcon fontSize="large" />
+              </IconButton>
+              <span className="text-2xl leading-normal">{quantity}</span>
+              <IconButton
+                aria-label='min-button'
+                size="large"
+                onClick={() => handleQuantity('inc')}
+              >
+                <AddBoxOutlinedIcon fontSize="large" />
+              </IconButton>
+            </div>
+            <Button
+              variant="contained"
+              onClick={() => {
+                user ? addCart(product) : needLogin();
+              }}
+              disabled={quantity < 1}
+            >
+              Add to cart
+            </Button>
+          </>
+        }
       </Grid>
     </Grid>
   );

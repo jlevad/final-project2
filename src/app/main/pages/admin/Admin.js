@@ -1,72 +1,72 @@
 import { useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Card, Grid, TextField, Typography } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateStock } from '../../../redux/productRedux';
 
 const Admin = () => {
-  const { products } = useSelector((state) => state.product);
+  const { products, loading } = useSelector((state) => state.product);
   const dispatch = useDispatch()
-  const [newStock, setNewStock] = useState(null)
+  const [newStock, setNewStock] = useState(0)
 
   const handleUpdateStock = (data) => {
-    if (newStock !== null) {
-      dispatch(updateStock({ ...data, stock: newStock }))
-      setNewStock(null)
+    if (newStock) {
+      dispatch(updateStock({ ...data, stock: parseInt(newStock) }))
     } else {
-      alert('Please input field')
+      dispatch(updateStock({ ...data, stock: 0 }))
     }
   }
+
   return (
     <>
-      {products.length !== 0 ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Product</TableCell>
-                <TableCell align="right">Stock</TableCell>
-                <TableCell align="right">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {products?.map((row) => (
-                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-                  <TableCell component="th" scope="row">
-                    <div className="flex">
-                      <div className="img-wrapper grid place-items-center" style={{ width: '130px', height: '130px' }}>
-                        <img src={row?.image} alt={row?.title} className="w-8/12 h-28 object-contain" />
-                      </div>
-                      <div style={{ width: '70%' }}>
-                        <Typography component="h1" sx={{ fontWeight: '700' }}>
-                          {row?.title?.slice(0, 35)}...
-                        </Typography>
-                        <Typography variant="body1">
-                          {row?.description}
-                        </Typography>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell align="right" sx={{ width: '18%' }}>
-                    <TextField id="outlined-basic" label="Stock" variant="outlined" type="number" onChange={(e) => setNewStock(e.target.value)} />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button variant="contained" onClick={() => handleUpdateStock(row)}>Update</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <Typography variant="h4">No data</Typography>
-      )}
+      {loading ?
+        <Grid container alignItems="center">
+          <Grid item xs={12}>
+            <CircularProgress />
+          </Grid>
+        </Grid>
+        : products.length !== 0 ?
+          products.map((row) => (
+            <Card className="p-4 m-4">
+              <div className="flex flex-col md:flex-row">
+                <div className="img-wrapper grid place-items-center" style={{ width: '130px', height: '130px' }}>
+                  <img src={row?.image} alt={row?.title} className="w-8/12 h-28 object-contain" />
+                </div>
+                <div className="w-full">
+                  <Typography component="h1" sx={{ fontWeight: '700' }}>
+                    {row?.title}
+                  </Typography>
+                  <Typography>
+                    {row?.description.slice(0, 200)}...
+                  </Typography>
+                </div>
+                <div className="m-4 flex flex-row items-center justify-center">
+                  <TextField
+                    id="outlined-basic"
+                    label="Stock"
+                    variant="outlined"
+                    type="number"
+                    size="small"
+                    defaultValue={row?.stock}
+                    onChange={(e) => setNewStock(e.target.value)}
+                  />
+                  <div className="justify-end ml-4">
+                    <Button
+                      variant="contained"
+                      onClick={() => handleUpdateStock(row)}
+                    >
+                      Update
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))
+          :
+          <div className="w-full text-center">
+            <Typography>Data Not Found</Typography>
+          </div>
+      }
     </>
   );
 };
