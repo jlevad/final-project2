@@ -13,7 +13,7 @@ const DetailProduct = () => {
   const user = useSelector((state) => state.user.currentUser);
   const cart = useSelector((state) => state.cart);
   const history = useHistory();
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
@@ -95,10 +95,18 @@ const DetailProduct = () => {
               <IconButton
                 aria-label='min-button'
                 size="large"
+                disabled={quantity === product?.stock}
                 onClick={() => handleQuantity('inc')}
               >
                 <AddBoxOutlinedIcon fontSize="large" />
               </IconButton>
+              {quantity === product?.stock ?
+                <div>
+                  <Typography color="red">
+                    Max Quantity
+                  </Typography>
+                </div> : ''
+              }
             </div>
             <Button
               variant="contained"
